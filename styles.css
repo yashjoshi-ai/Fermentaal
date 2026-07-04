@@ -1,0 +1,553 @@
+/* ============================================================
+   FermenTaal — 3D interactive brand site
+   Visual system: warm cream base, deep charcoal contrast,
+   amber/gold/green brand accents. Restrained & editorial.
+   ============================================================ */
+
+:root {
+  --cream: #fbf7f0;
+  --cream-2: #f3ebdd;
+  --charcoal: #1a1714;
+  --charcoal-2: #221d18;
+  --orange: #e8731f;
+  --orange-deep: #c2541a;
+  --gold: #c9962e;
+  --green: #8da340;
+  --ink: #2a241e;
+  --muted: #6b6052; /* darkened for AA contrast (4.5:1) on cream */
+
+  --serif: "Fraunces", "Georgia", "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --maxw: 1240px;
+  --pad: clamp(20px, 5vw, 80px);
+  --nav-h: 58px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* When Lenis controls scrolling */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+/* Anchor targets clear the fixed localnav */
+section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 18px); }
+
+/* ---------- Fixed 3D canvas (background) ---------- */
+#webgl {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+  /* Soft warm light behind the glass bottle */
+  background:
+    radial-gradient(120% 80% at 70% 18%, #fff6e9 0%, #fbf1e1 38%, #f4e6cf 72%, #efddc4 100%);
+  pointer-events: none;     /* sections scroll over it; canvas re-enabled on hero */
+}
+#webgl.interactive { pointer-events: auto; }
+
+/* Fallback when WebGL is unavailable */
+body.no-webgl #webgl {
+  background:
+    radial-gradient(120% 80% at 50% 30%, #ffe7c2 0%, #f3b463 45%, #e8731f 100%);
+}
+body.no-webgl .hero__bottle-fallback { display: block; }
+
+/* ---------- Page scaffold ---------- */
+main { position: relative; z-index: 1; }
+
+.section {
+  position: relative;
+  padding: clamp(80px, 12vh, 160px) var(--pad);
+}
+.wrap { max-width: var(--maxw); margin: 0 auto; width: 100%; }
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--orange-deep);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.eyebrow::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--orange);
+  display: inline-block;
+}
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.04; letter-spacing: -0.01em; }
+
+.lead { font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--ink); max-width: 46ch; }
+.muted { color: var(--muted); }
+
+/* Reveal animation base (GSAP toggles .is-in) */
+.reveal { opacity: 0; transform: translateY(28px); }
+.reveal.is-in { opacity: 1; transform: none; transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+
+/* ============================================================
+   LOCAL NAV  (fixed, frosted-glass, slides in after the hero)
+   ============================================================ */
+.localnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 60;
+  height: var(--nav-h);
+  transform: translateY(-100%);
+  transition: transform 0.5s var(--ease);
+  background: rgba(251, 247, 240, 0.72);
+  -webkit-backdrop-filter: saturate(1.6) blur(18px);
+  backdrop-filter: saturate(1.6) blur(18px);
+  border-bottom: 1px solid rgba(26, 23, 20, 0.08);
+}
+.localnav.is-in { transform: translateY(0); }
+.localnav__inner {
+  max-width: var(--maxw);
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+.localnav__brand {
+  font-family: var(--serif);
+  font-size: 1.18rem;
+  color: var(--charcoal);
+  letter-spacing: -0.01em;
+  margin-right: auto;
+}
+.localnav__links { display: flex; gap: 24px; }
+.localnav__links a {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.25s var(--ease);
+}
+.localnav__links a:hover { color: var(--charcoal); }
+.btn--sm { font-size: 0.84rem; padding: 0.5em 1.2em; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pad);
+}
+.hero__inner { max-width: var(--maxw); margin: 0 auto; width: 100%; }
+
+.hero__brandmark {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(3.4rem, 13vw, 11rem);
+  line-height: 0.92;
+  color: var(--charcoal);
+  letter-spacing: -0.02em;
+  mix-blend-mode: multiply;
+}
+.hero__brandmark .t { display: block; }
+.hero__tagline {
+  margin-top: clamp(18px, 3vh, 34px);
+  font-size: clamp(1rem, 1.7vw, 1.4rem);
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.hero__tagline b { color: var(--orange-deep); font-weight: 600; }
+
+.hero__cta { margin-top: clamp(26px, 4vh, 44px); display: flex; gap: 14px; flex-wrap: wrap; }
+
+.scroll-cue {
+  position: absolute;
+  left: 50%; bottom: 26px;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted);
+}
+.scroll-cue .bar {
+  width: 1px; height: 46px;
+  background: linear-gradient(var(--orange), transparent);
+  animation: cue 2.2s var(--ease) infinite;
+  transform-origin: top;
+}
+@keyframes cue { 0% { transform: scaleY(0); } 40% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+.hero__bottle-fallback { display: none; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  font-family: var(--sans); font-weight: 600; font-size: 0.98rem;
+  padding: 0.92em 1.5em; border-radius: 100px;
+  border: 1px solid transparent; cursor: pointer;
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease), box-shadow 0.3s var(--ease), color 0.3s var(--ease);
+  will-change: transform;
+}
+.btn svg { width: 1.2em; height: 1.2em; }
+.btn--primary { background: var(--charcoal); color: var(--cream); box-shadow: 0 10px 30px -12px rgba(26,23,20,0.6); }
+.btn--primary:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -14px rgba(26,23,20,0.7); }
+.btn--wa { background: #25d366; color: #062e15; }
+.btn--wa:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -16px rgba(37,211,102,0.7); }
+.btn--ig { background: linear-gradient(120deg, #feda75, #fa7e1e 35%, #d62976 65%, #962fbf 90%); color: #fff; }
+.btn--ig:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -16px rgba(214,41,118,0.55); }
+.btn--ghost { background: transparent; color: var(--charcoal); border-color: rgba(26,23,20,0.25); }
+.btn--ghost:hover { border-color: var(--charcoal); transform: translateY(-3px); }
+.btn--lg { font-size: 1.05rem; padding: 1.05em 1.9em; }
+
+/* ============================================================
+   SHOWCASE  (pinned chapter — scroll drives the bottle tour)
+   ------------------------------------------------------------
+   Default layout (no JS / reduced motion): a normal stacked
+   section, everything visible. With body.js-motion, it becomes
+   a full-viewport stage that GSAP pins and choreographs.
+   ============================================================ */
+.showcase { position: relative; }
+.showcase__stage {
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--pad);
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.showcase__title {
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  color: var(--charcoal);
+  text-align: center;
+  margin-bottom: clamp(30px, 6vh, 60px);
+}
+.showcase__fallback { display: none; }
+body.no-webgl .showcase__fallback {
+  display: block;
+  height: min(56vh, 520px);
+  width: auto;
+  margin: 0 auto clamp(30px, 6vh, 50px);
+}
+
+.callout {
+  max-width: 340px;
+  background: rgba(255, 252, 246, 0.68);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(26, 23, 20, 0.08);
+  border-radius: 22px;
+  padding: 26px 26px 28px;
+  box-shadow: 0 24px 60px -30px rgba(26, 23, 20, 0.35);
+}
+.callout + .callout { margin-top: 20px; }
+.callout__step {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+}
+.callout h3 { font-size: 1.5rem; color: var(--charcoal); margin: 8px 0 8px; }
+.callout p { font-size: 0.95rem; color: var(--muted); line-height: 1.55; }
+
+/* Stage mode: full-viewport pinned scene, callouts float over the bottle */
+body.js-motion .showcase { height: 100vh; }
+body.js-motion .showcase__stage {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  padding: 0;
+  overflow: hidden;
+}
+body.js-motion .showcase__title {
+  position: absolute;
+  left: 50%; top: 8%;
+  width: min(92vw, 900px);
+  transform: translateX(-50%);
+  margin: 0;
+  opacity: 0; /* GSAP fades it in as the pin starts */
+}
+body.js-motion .callout {
+  position: absolute;
+  margin: 0;
+  opacity: 0; /* GSAP choreographs visibility */
+}
+body.js-motion .callout--1 { right: 7%; top: 50%; }
+body.js-motion .callout--2 { left: 7%; top: 50%; }
+body.js-motion .callout--3 { left: 50%; bottom: 9%; }
+body.js-motion.no-webgl .showcase__fallback {
+  position: absolute;
+  left: 50%; top: 50%;
+  height: min(64vh, 600px);
+  margin: 0;
+}
+
+/* ============================================================
+   STORY
+   ============================================================ */
+.story { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(30px, 6vw, 90px); align-items: center; }
+.story__media { min-height: 40vh; } /* space the 3D bottle floats into */
+.story h2 { font-size: clamp(2rem, 4.6vw, 3.6rem); margin: 18px 0 22px; color: var(--charcoal); }
+.story p + p { margin-top: 1.1em; }
+.story .sign {
+  margin-top: 26px; font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--orange-deep);
+}
+.story .sign small { display: block; font-family: var(--sans); font-style: normal; font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+/* ============================================================
+   STATEMENT  (big type, words fill in as you scroll)
+   ============================================================ */
+.statement { text-align: center; }
+.statement__text {
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 4.2vw, 3.3rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--charcoal);
+  max-width: 24ch;
+  margin: 0 auto;
+}
+.statement__text .w { display: inline-block; }
+
+/* ============================================================
+   BREW / WHAT'S INSIDE  (dark panel)
+   ============================================================ */
+.panel { will-change: transform; }
+.brew {
+  background: var(--charcoal);
+  color: var(--cream);
+  border-radius: 36px;
+  margin: 0 clamp(8px, 2vw, 24px);
+}
+.brew .eyebrow { color: var(--gold); }
+.brew .eyebrow::before { background: var(--gold); }
+.brew h2 { font-size: clamp(2rem, 4.6vw, 3.6rem); color: var(--cream); margin: 16px 0 10px; max-width: 16ch; }
+.brew__sub { color: #d8cdbd; max-width: 52ch; margin-bottom: clamp(34px, 5vw, 56px); }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.card {
+  background: var(--charcoal-2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 28px 24px 30px;
+  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), background 0.4s var(--ease);
+}
+.card:hover { transform: translateY(-6px); border-color: rgba(201,150,46,0.5); background: #2a231b; }
+.card__icon {
+  width: 46px; height: 46px; border-radius: 12px; margin-bottom: 18px;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+  color: #1a1714;
+}
+.card__icon svg { width: 24px; height: 24px; }
+.card h3 { font-size: 1.25rem; color: var(--cream); margin-bottom: 8px; }
+.card p { font-size: 0.94rem; color: #b9ad9d; line-height: 1.55; }
+
+/* ---------- Stats (count up on scroll) ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: clamp(40px, 6vw, 64px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: clamp(34px, 5vw, 52px);
+}
+.stat__num {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 6vw, 4.6rem);
+  line-height: 1;
+  color: var(--gold);
+}
+.stat p { font-size: 0.92rem; color: #b9ad9d; margin-top: 10px; max-width: 26ch; }
+
+/* ============================================================
+   GALLERY  (horizontal filmstrip; scroll-scrubbed on desktop,
+   swipeable scroll-snap strip on touch / reduced motion)
+   ============================================================ */
+.gallery { padding-left: 0; padding-right: 0; }
+.gallery__head { padding: 0 var(--pad); }
+.gallery h2 { font-size: clamp(2rem, 4.6vw, 3.6rem); color: var(--charcoal); margin: 14px 0 8px; }
+.gallery__sub { color: var(--muted); margin-bottom: clamp(30px, 5vw, 52px); max-width: 50ch; }
+
+.gallery__viewport { overflow: hidden; }
+.gallery__track {
+  display: flex;
+  gap: 16px;
+  padding: 0 var(--pad) 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(26,23,20,0.25) transparent;
+}
+.gtile {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(78vw, 460px);
+  height: min(58vh, 540px);
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--cream-2);
+  box-shadow: inset 0 0 0 1px rgba(26,23,20,0.06);
+  scroll-snap-align: center;
+}
+.gtile img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease); }
+.gtile:hover img { transform: scale(1.05); }
+.gtile--brand { width: min(60vw, 340px); }
+.tile__tag {
+  position: absolute; left: 14px; bottom: 12px;
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #fff; background: rgba(26,23,20,0.55); backdrop-filter: blur(6px);
+  padding: 5px 10px; border-radius: 100px;
+}
+
+/* Desktop + motion: GSAP pins the section and drives the strip,
+   so the strip must not scroll on its own — and the whole chapter
+   (head + strip) must fit inside one pinned viewport. */
+body.js-motion .gallery--pinned {
+  height: 100vh;
+  padding-top: calc(var(--nav-h) + 26px);
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+body.js-motion .gallery--pinned .gallery__head { flex: 0 0 auto; }
+body.js-motion .gallery--pinned .gallery__sub { margin-bottom: clamp(18px, 3vh, 34px); }
+body.js-motion .gallery--pinned .gallery__viewport {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+body.js-motion .gallery--pinned .gallery__track {
+  overflow-x: visible;
+  width: max-content;
+  scroll-snap-type: none;
+  padding-bottom: 0;
+}
+body.js-motion .gallery--pinned .gtile {
+  width: clamp(360px, 40vw, 620px);
+  height: min(56vh, 580px);
+}
+body.js-motion .gallery--pinned .gtile--brand { width: clamp(280px, 24vw, 380px); }
+
+/* ============================================================
+   ORDER
+   ============================================================ */
+.order { background: var(--charcoal); color: var(--cream); border-radius: 36px; margin: 0 clamp(8px, 2vw, 24px); text-align: center; }
+.order .eyebrow { color: var(--gold); }
+.order .eyebrow::before { background: var(--gold); }
+.order h2 { font-size: clamp(2.2rem, 6vw, 4.6rem); color: var(--cream); margin: 18px auto 14px; max-width: 16ch; }
+.order__sub { color: #d8cdbd; max-width: 44ch; margin: 0 auto clamp(30px, 5vw, 44px); }
+.order__btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.steps {
+  display: flex; justify-content: center; gap: clamp(20px, 5vw, 64px); flex-wrap: wrap;
+  margin-top: clamp(44px, 7vw, 72px);
+  border-top: 1px solid rgba(255,255,255,0.1); padding-top: clamp(34px, 5vw, 52px);
+}
+.step { max-width: 220px; }
+.step__n { font-family: var(--serif); font-size: 2.2rem; color: var(--gold); line-height: 1; }
+.step h4 { font-family: var(--sans); font-weight: 600; margin: 10px 0 6px; color: var(--cream); }
+.step p { font-size: 0.9rem; color: #b9ad9d; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer { background: var(--cream); padding: clamp(54px, 8vw, 90px) var(--pad) 40px; }
+.footer__top { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; border-bottom: 1px solid rgba(26,23,20,0.12); padding-bottom: 30px; }
+.footer__brand { font-family: var(--serif); font-size: clamp(2.4rem, 7vw, 5rem); color: var(--charcoal); line-height: 0.9; }
+.footer__links { display: flex; gap: 22px; font-weight: 500; }
+.footer__links a { position: relative; }
+.footer__links a::after { content: ""; position: absolute; left: 0; bottom: -3px; width: 0; height: 1px; background: var(--orange); transition: width 0.3s var(--ease); }
+.footer__links a:hover::after { width: 100%; }
+.footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 24px; font-size: 0.85rem; color: var(--muted); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .story { grid-template-columns: 1fr; }
+  .story__media { display: none; } /* bottle fades out before the story on phones */
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .stats { grid-template-columns: 1fr; gap: 26px; }
+  .hero__brandmark { mix-blend-mode: normal; }
+  .localnav__links { display: none; }
+
+  /* Stage mode on phones: callouts dock at the bottom, full width */
+  body.js-motion .showcase__title { top: 10%; }
+  body.js-motion .callout {
+    max-width: min(88vw, 360px);
+    padding: 20px 20px 22px;
+  }
+  body.js-motion .callout--1,
+  body.js-motion .callout--2,
+  body.js-motion .callout--3 { left: 50%; right: auto; top: auto; bottom: 6%; }
+  .callout h3 { font-size: 1.3rem; }
+}
+@media (max-width: 560px) {
+  .cards { grid-template-columns: 1fr; }
+  .btn { font-size: 0.92rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.is-in { transition: none; opacity: 1; transform: none; }
+  .reveal { transition-delay: 0s !important; }
+  .scroll-cue .bar { animation: none; }
+}
+
+/* ============================================================
+   ACCESSIBILITY & INTERACTION POLISH
+   (keyboard focus, skip link, press feedback, staggered reveals)
+   ============================================================ */
+
+/* Visible focus rings for keyboard users only — never strip them */
+:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) { outline: none; }
+.btn:focus-visible { outline-offset: 4px; }
+.brew :focus-visible, .order :focus-visible { outline-color: var(--gold); }
+
+/* Skip-to-content link (visible on keyboard focus) */
+.skip-link {
+  position: fixed;
+  left: 16px; top: -80px;
+  z-index: 1000;
+  background: var(--charcoal); color: var(--cream);
+  padding: 12px 18px; border-radius: 12px;
+  font-family: var(--sans); font-weight: 600; font-size: 0.95rem;
+  box-shadow: 0 12px 30px -12px rgba(26,23,20,0.6);
+  transition: top 0.25s var(--ease);
+}
+.skip-link:focus { top: 16px; }
+
+/* Tactile press feedback on buttons (pairs with hover lift) */
+.btn:active { transform: translateY(-1px) scale(0.985); }
+
+/* Staggered entrance for grouped cards/steps — feels intentional, not all-at-once */
+.cards .card.reveal:nth-child(2) { transition-delay: 0.07s; }
+.cards .card.reveal:nth-child(3) { transition-delay: 0.14s; }
+.cards .card.reveal:nth-child(4) { transition-delay: 0.21s; }
+.steps .step.reveal:nth-child(2) { transition-delay: 0.10s; }
+.steps .step.reveal:nth-child(3) { transition-delay: 0.20s; }
+
+/* Gallery tiles: clearer keyboard focus + slightly stronger tag legibility */
+.gallery .gtile:focus-within { outline: 2px solid var(--orange); outline-offset: 3px; }

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FermenTaal — Pineapple Kombucha · Homemade in Dehradun</title>
+  <meta name="description" content="FermenTaal — small-batch pineapple kombucha, handmade in Dehradun with all-natural ingredients. Order on WhatsApp or Instagram." />
+  <meta name="theme-color" content="#fbf7f0" />
+  <link rel="icon" href="assets/logo.jpg" />
+
+  <!-- Fonts (degrade gracefully offline to Georgia / system sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== Sticky local nav (appears after the hero, Apple-style) ===== -->
+  <header class="localnav" id="localnav">
+    <div class="localnav__inner">
+      <a class="localnav__brand" href="#top">FermenTaal</a>
+      <nav class="localnav__links" aria-label="Sections">
+        <a href="#showcase">The bottle</a>
+        <a href="#story">Story</a>
+        <a href="#inside">Inside</a>
+        <a href="#gallery">Gallery</a>
+      </nav>
+      <a class="btn btn--primary btn--sm" href="#order">Order</a>
+    </div>
+  </header>
+
+  <!-- ===== Fixed 3D bottle scene (background) ===== -->
+  <canvas id="webgl" aria-hidden="true"></canvas>
+
+  <main id="main" tabindex="-1">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top">
+      <div class="hero__inner">
+        <h1 class="hero__brandmark">
+          <span class="t">Fermen</span><span class="t">Taal</span>
+        </h1>
+        <p class="hero__tagline">Pineapple <b>Kombucha</b> · Homemade in Dehradun</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="#order">Order now
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--ghost btn--lg" href="#story">Our story</a>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true"><span>scroll</span><span class="bar"></span></div>
+    </section>
+
+    <!-- ============ SHOWCASE (pinned, scroll-driven bottle tour) ============ -->
+    <section class="showcase" id="showcase">
+      <div class="showcase__stage">
+        <img class="showcase__fallback" src="assets/bottle-cutout.png" alt="" aria-hidden="true" />
+        <h2 class="showcase__title">Take a closer look.</h2>
+        <div class="callout callout--1">
+          <span class="callout__step">01</span>
+          <h3>Alive in every sip</h3>
+          <p>Raw and naturally fizzy — a real, working ferment with billions of live cultures, never pasteurised flat.</p>
+        </div>
+        <div class="callout callout--2">
+          <span class="callout__step">02</span>
+          <h3>Real pineapple, pressed</h3>
+          <p>Fresh fruit, not flavouring. Bright, tropical and just-tart — the way Dehradun summers taste.</p>
+        </div>
+        <div class="callout callout--3">
+          <span class="callout__step">03</span>
+          <h3>Brewed slow, by hand</h3>
+          <p>Small batches on a kitchen counter in Dehradun. No factory. No shortcuts. Every bottle checked and tasted.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STORY ============ -->
+    <section class="section story" id="story">
+      <div class="story__text">
+        <span class="eyebrow reveal">The founder's story</span>
+        <h2 class="reveal">It started with a single jar.</h2>
+        <p class="lead reveal">FermenTaal began on a kitchen counter in Dehradun, with one glass jar, a stubborn SCOBY, and the belief that a drink could be <em>alive</em>.</p>
+        <p class="reveal muted">We were tired of sodas that were all sugar and no soul — so we brewed our own. Every bottle is still made by hand, in small batches, with real pineapple and nothing artificial. No factory. No shortcuts. Just patience, wild ferment, and clean Himalayan air.</p>
+        <p class="reveal muted">This is kombucha the way it's meant to be: honest, fizzy, and proudly homemade.</p>
+        <p class="sign reveal">Brewed with love in Dehradun<small>Founder, FermenTaal</small></p>
+      </div>
+      <div class="story__media" aria-hidden="true"><!-- the 3D bottle floats into this column --></div>
+    </section>
+
+    <!-- ============ STATEMENT (word-by-word scroll reveal) ============ -->
+    <section class="section statement" id="statement">
+      <div class="wrap">
+        <p class="statement__text">Tea, fruit, time, and good bacteria. No preservatives, no colours, no concentrates. Just a slow, wild ferment — bottled alive under clean Himalayan air.</p>
+      </div>
+    </section>
+
+    <!-- ============ BREW / WHAT'S INSIDE ============ -->
+    <section class="section" id="inside">
+      <div class="brew panel section wrap">
+        <span class="eyebrow reveal">What's inside</span>
+        <h2 class="reveal">Alive, all-natural, small-batch.</h2>
+        <p class="brew__sub reveal">Brewed slow and bottled fresh — what goes in is exactly what you'd put in yourself, and nothing you wouldn't.</p>
+        <div class="cards">
+          <div class="card reveal">
+            <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C9 6 7 8 7 12a5 5 0 0010 0c0-4-2-6-5-10z" stroke-linejoin="round"/></svg></div>
+            <h3>Live cultures</h3>
+            <p>A real, active ferment — billions of wild probiotics in every bottle, never pasteurised flat.</p>
+          </div>
+          <div class="card reveal">
+            <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v4M9 7c-3 1-5 4-5 8a8 8 0 0016 0c0-4-2-7-5-8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>Real pineapple</h3>
+            <p>Pressed fruit, not flavouring. Bright, tropical and just-tart — the way Dehradun summers taste.</p>
+          </div>
+          <div class="card reveal">
+            <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 13a8 8 0 0116 0M2 13h20M7 13v6M17 13v6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>Small batch</h3>
+            <p>Made by hand in tiny runs, so every bottle is checked, tasted and signed off before it reaches you.</p>
+          </div>
+          <div class="card reveal">
+            <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>Nothing artificial</h3>
+            <p>No preservatives, no colours, no concentrate. Just tea, fruit, time, and good bacteria.</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat reveal">
+            <div class="stat__num"><span class="count" data-count="100">100</span>%</div>
+            <p>real pressed pineapple — never a flavouring</p>
+          </div>
+          <div class="stat reveal">
+            <div class="stat__num"><span class="count" data-count="0">0</span></div>
+            <p>preservatives, colours or concentrates</p>
+          </div>
+          <div class="stat reveal">
+            <div class="stat__num"><span class="count" data-count="1">1</span></div>
+            <p>flavour we obsess over — pineapple</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY (horizontal filmstrip, scroll-scrubbed on desktop) ============ -->
+    <section class="section gallery" id="gallery">
+      <div class="wrap gallery__head">
+        <span class="eyebrow reveal">In the wild</span>
+        <h2 class="reveal">Made to be carried, chilled, shared.</h2>
+        <p class="gallery__sub reveal">From our kitchen in Dehradun to wherever you're thirsty.</p>
+      </div>
+      <div class="gallery__viewport">
+        <div class="gallery__track">
+          <figure class="gtile"><img src="assets/lifestyle-pineapple.jpg" alt="FermenTaal kombucha on a bed of fresh pineapple" loading="lazy" /><figcaption class="tile__tag">Fresh pressed</figcaption></figure>
+          <figure class="gtile"><img src="assets/lifestyle-ice.jpg" alt="Two bottles of FermenTaal on ice in a clear carry bag" loading="lazy" /><figcaption class="tile__tag">On ice</figcaption></figure>
+          <figure class="gtile"><img src="assets/lifestyle-orchard.jpg" alt="FermenTaal kombucha resting in an orchard tree" loading="lazy" /><figcaption class="tile__tag">In the orchard</figcaption></figure>
+          <figure class="gtile"><img src="assets/lifestyle-table.jpg" alt="FermenTaal kombucha on a wooden table" loading="lazy" /><figcaption class="tile__tag">On the table</figcaption></figure>
+          <figure class="gtile gtile--brand"><img src="assets/logo.jpg" alt="FermenTaal logo" loading="lazy" /></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ORDER ============ -->
+    <section class="section" id="order">
+      <div class="order panel section wrap">
+        <span class="eyebrow reveal">Place an order</span>
+        <h2 class="reveal">Thirsty? We're one message away.</h2>
+        <p class="order__sub reveal">We take orders directly on WhatsApp and Instagram — tell us your flavour and quantity, and we'll sort the rest.</p>
+        <div class="order__btns">
+          <a id="wa-link" class="btn btn--wa btn--lg reveal" href="https://wa.me/919410795450" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.06 24l1.68-6.13A11.86 11.86 0 01.16 11.9C.16 5.33 5.5 0 12.07 0a11.82 11.82 0 018.41 3.49 11.82 11.82 0 013.48 8.42c0 6.57-5.34 11.91-11.9 11.91a11.9 11.9 0 01-5.7-1.45L.06 24zM6.6 20.13l.36.21a9.86 9.86 0 005.03 1.38 9.9 9.9 0 009.9-9.9 9.9 9.9 0 00-16.9-7 9.83 9.83 0 00-2.9 7 9.82 9.82 0 001.51 5.26l.24.38-1 3.63 3.76-.99zM17.47 14.3c-.07-.12-.26-.19-.55-.33-.29-.15-1.7-.84-1.96-.94-.26-.1-.46-.14-.65.14-.19.29-.74.94-.91 1.13-.17.19-.34.22-.62.07-.29-.14-1.21-.44-2.3-1.42-.85-.76-1.42-1.69-1.59-1.98-.17-.29-.02-.44.13-.59.13-.13.29-.34.43-.51.15-.17.19-.29.29-.48.1-.19.05-.36-.02-.51-.07-.14-.65-1.57-.89-2.15-.24-.56-.47-.48-.65-.49l-.55-.01c-.19 0-.5.07-.76.36-.26.29-1 .98-1 2.38 0 1.41 1.02 2.77 1.17 2.96.14.19 2.01 3.07 4.88 4.31.68.29 1.21.47 1.63.6.68.22 1.31.19 1.8.12.55-.08 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36z"/></svg>
+            Order on WhatsApp
+          </a>
+          <a id="ig-link" class="btn btn--ig btn--lg reveal" href="https://instagram.com/fermentaal" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.9 5.9 0 00-2.13 1.38A5.9 5.9 0 00.63 4.14c-.3.76-.5 1.64-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.38 2.13a5.9 5.9 0 002.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.9 5.9 0 002.13-1.38 5.9 5.9 0 001.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 00-1.38-2.13A5.9 5.9 0 0019.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 105.84 12 6.16 6.16 0 0012 5.84zm0 10.16A4 4 0 1116 12a4 4 0 01-4 4zm6.41-10.4a1.44 1.44 0 11-1.44-1.44 1.44 1.44 0 011.44 1.44z"/></svg>
+            Order on Instagram
+          </a>
+        </div>
+        <div class="steps">
+          <div class="step reveal"><div class="step__n">01</div><h4>Send a message</h4><p>DM us your flavour and how many bottles you'd like.</p></div>
+          <div class="step reveal"><div class="step__n">02</div><h4>We confirm</h4><p>We reply with availability, pickup or delivery, and payment.</p></div>
+          <div class="step reveal"><div class="step__n">03</div><h4>Sip fresh</h4><p>Your small-batch kombucha arrives chilled and alive.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer__top">
+          <div class="footer__brand">FermenTaal</div>
+          <nav class="footer__links">
+            <a href="#story">Story</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#order">Order</a>
+            <a id="ig-link-2" href="https://instagram.com/fermentaal" target="_blank" rel="noopener">Instagram</a>
+          </nav>
+        </div>
+        <div class="footer__bottom">
+          <span>Homemade in Dehradun · all natural ingredients</span>
+          <span>© <span id="year"></span> FermenTaal. Brewed by hand.</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Vendored libraries (work offline, load fine over file://) -->
+  <script src="libs/three.min.js"></script>
+  <script src="libs/OrbitControls.js"></script>
+  <script src="libs/RoomEnvironment.js"></script>
+  <script src="libs/gsap.min.js"></script>
+  <script src="libs/ScrollTrigger.min.js"></script>
+  <script src="libs/lenis.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

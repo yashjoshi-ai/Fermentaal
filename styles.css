@@ -197,6 +197,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.04; let
 @keyframes cue { 0% { transform: scaleY(0); } 40% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
 
 .hero__bottle-fallback { display: none; }
+.hero__bottle-simple { display: none; }   /* phone-only product shot (see media query) */
+.orderbar { display: none; }              /* phone-only sticky order bar (see media query) */
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -481,24 +483,70 @@ body.js-motion .gallery--pinned .gtile--brand { width: clamp(280px, 24vw, 380px)
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+/* ============================================================
+   PHONE-SIMPLE MODE  (≤900px)
+   ------------------------------------------------------------
+   Phones get a calm, static, order-first page: no 3D canvas,
+   no pinned chapters, no reveals — just the brand, the bottle,
+   and one-tap ordering (sticky bottom bar + big buttons).
+   app.js skips all choreography at this width (see SIMPLE).
+   ============================================================ */
 @media (max-width: 900px) {
   .story { grid-template-columns: 1fr; }
-  .story__media { display: none; } /* bottle fades out before the story on phones */
+  .story__media { display: none; }
   .cards { grid-template-columns: repeat(2, 1fr); }
   .stats { grid-template-columns: 1fr; gap: 26px; }
   .hero__brandmark { mix-blend-mode: normal; }
   .localnav__links { display: none; }
-
-  /* Stage mode on phones: callouts dock at the bottom, full width */
-  body.js-motion .showcase__title { top: 10%; }
-  body.js-motion .callout {
-    max-width: min(88vw, 360px);
-    padding: 20px 20px 22px;
-  }
-  body.js-motion .callout--1,
-  body.js-motion .callout--2,
-  body.js-motion .callout--3 { left: 50%; right: auto; top: auto; bottom: 6%; }
   .callout h3 { font-size: 1.3rem; }
+
+  /* --- No animations or effects: everything readable, immediately --- */
+  html { scroll-behavior: smooth; }             /* native anchor scrolling only */
+  #webgl { display: none; }                     /* no 3D scene on phones */
+  .scroll-cue { display: none; }                /* looping cue animation off */
+  .reveal, .reveal.is-in { opacity: 1; transform: none; transition: none; }
+  .gtile img, .gtile:hover img { transition: none; transform: none; }
+
+  /* --- Nav is always there: brand top-left, Order pill top-right --- */
+  .localnav { transform: none; transition: none; }
+  .hero { padding-top: calc(var(--nav-h) + 16px); }
+
+  /* --- Hero: brand + real bottle + full-width CTAs (brand awareness) --- */
+  .hero__inner { text-align: center; }
+  .hero__cta { flex-direction: column; align-items: stretch; }
+  .hero__cta .btn { justify-content: center; }
+  .hero__bottle-simple {
+    display: block;
+    margin: 26px auto 0;
+    height: min(42vh, 380px);
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* --- Showcase: static stacked story cards, centred --- */
+  .showcase__title { margin-bottom: 28px; }
+  .callout { margin: 0 auto; }
+
+  /* --- Order section: big tap targets --- */
+  .order__btns { flex-direction: column; align-items: stretch; }
+  .order__btns .btn { justify-content: center; }
+
+  /* --- Sticky bottom order bar: ordering is always one tap away --- */
+  body { padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+  .orderbar {
+    display: flex;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 70;
+    gap: 10px;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(251, 247, 240, 0.94);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    backdrop-filter: saturate(1.4) blur(14px);
+    border-top: 1px solid rgba(26, 23, 20, 0.1);
+  }
+  .orderbar .btn { justify-content: center; transition: none; }
+  .orderbar .btn--wa { flex: 1; }
 }
 @media (max-width: 560px) {
   .cards { grid-template-columns: 1fr; }

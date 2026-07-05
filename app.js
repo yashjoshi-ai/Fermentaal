@@ -33,13 +33,18 @@ const CONFIG = {
   set("wa-link", wa);
   set("ig-link", ig);
   set("ig-link-2", ig);
+  set("wa-link-bar", wa);
+  set("ig-link-bar", ig);
   const yr = document.getElementById("year");
   if (yr) yr.textContent = new Date().getFullYear();
 })();
 
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Phones / small tablets (≤900px) get the simple, static, order-first experience:
+// no 3D scene, no smooth-scroll, no choreography — styles.css handles the layout.
+const SIMPLE = window.matchMedia("(max-width: 900px)").matches;
 // Scroll choreography (pinning, scrubbing, splitting) only runs with GSAP + motion OK.
-const MOTION = !REDUCED && !!window.gsap && !!window.ScrollTrigger;
+const MOTION = !REDUCED && !SIMPLE && !!window.gsap && !!window.ScrollTrigger;
 
 /* ============================================================
    THREE.JS SCENE
@@ -600,7 +605,11 @@ function initHeroMotion() {
   });
 }
 
-/* ---------- 2 · Showcase: pinned scroll-driven bottle tour ---------- */
+/* ---------- 2 · Showcase: pinned scroll-driven bottle tour ----------
+   Desktop-only (phones use the simple static layout — see SIMPLE).
+   TASK-002: long scroll runway + softer scrub so every card can be read.
+   TASK-003: the bottle stays centred (slight nudges only) and the three
+   cards ACCUMULATE — once a card appears it stays until the tour ends. */
 function initShowcase() {
   const stageEl = document.querySelector(".showcase");
   if (!stageEl) return;
@@ -608,73 +617,55 @@ function initShowcase() {
   const noWebgl = document.body.classList.contains("no-webgl");
   const fallback = ".showcase__fallback";
 
-  const mm = gsap.matchMedia();
+  gsap.set([c1, c2], { yPercent: -50 });
+  gsap.set(c3, { xPercent: -50 });
 
-  const buildTimeline = (m) => {
-    // m = mobile flag. Poses tuned per breakpoint (world units of the 3D scene).
-    gsap.set([c1, c2], m ? { xPercent: -50 } : { yPercent: -50 });
-    gsap.set(c3, { xPercent: -50 });
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: stageEl,
+      start: "top top",
+      end: "+=520%",
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onToggle: (self) => { if (self.isActive) stage = "showcase"; },
+      onLeaveBack: () => { stage = "hero"; applyStage(); },
+      onLeave: () => { stage = "story"; applyStage(); },
+    },
+  });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: stageEl,
-        start: "top top",
-        end: "+=320%",
-        scrub: 0.6,
-        pin: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onToggle: (self) => { if (self.isActive) stage = "showcase"; },
-        onLeaveBack: () => { stage = "hero"; applyStage(); },
-        onLeave: () => { stage = "story"; applyStage(); },
-      },
-    });
+  // Chapter 1 — the bottle rises to centre stage beneath the title
+  // (crops the bottle's base slightly — the "up close" moment)
+  tl.to(target, { x: 0, y: -0.9, scale: 1.1, duration: 1.3, ease: "power1.inOut" }, 0);
+  tl.fromTo(".showcase__title", { autoAlpha: 0, y: 34 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "none" }, 0.9);
+  tl.to(".showcase__title", { autoAlpha: 0, y: -40, duration: 0.7, ease: "none" }, 2.2);
 
-    // Chapter 1 — the bottle rises to centre stage beneath the title
-    // (desktop crops the bottle's base slightly — the "up close" moment)
-    tl.to(target, m ? { x: 0, y: -0.15, scale: 0.55, duration: 1.3, ease: "power1.inOut" }
-                    : { x: 0, y: -0.9, scale: 1.1, duration: 1.3, ease: "power1.inOut" }, 0);
-    tl.fromTo(".showcase__title", { autoAlpha: 0, y: 34 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "none" }, 0.9);
-    tl.to(".showcase__title", { autoAlpha: 0, y: -40, duration: 0.7, ease: "none" }, 1.9);
+  // Chapter 2 — ease back from the close-up with a slight nudge left;
+  // card 01 lands on the right and stays.
+  tl.to(target, { x: -0.3, y: -0.05, scale: 1.08, duration: 1.4, ease: "power1.inOut" }, 2.6);
+  tl.to(lean, { y: 0.12, z: 0.035, duration: 1.4, ease: "power1.inOut" }, 2.6);
+  tl.fromTo(c1, { autoAlpha: 0, x: 70 }, { autoAlpha: 1, x: 0, duration: 0.9, ease: "none" }, 3.2);
 
-    // Chapter 2 — drift left, first callout on the right
-    tl.to(target, m ? { x: 0, y: 0.35, scale: 0.62, duration: 1.5, ease: "power1.inOut" }
-                    : { x: -1.25, y: -0.05, scale: 1.15, duration: 1.5, ease: "power1.inOut" }, 2.3);
-    tl.to(lean, { y: 0.2, z: 0.06, duration: 1.5, ease: "power1.inOut" }, 2.3);
-    tl.fromTo(c1, m ? { autoAlpha: 0, y: 46 } : { autoAlpha: 0, x: 70 },
-                  m ? { autoAlpha: 1, y: 0, duration: 0.9, ease: "none" } : { autoAlpha: 1, x: 0, duration: 0.9, ease: "none" }, 2.7);
-    tl.to(c1, m ? { autoAlpha: 0, y: -30, duration: 0.6, ease: "none" } : { autoAlpha: 0, x: -50, duration: 0.6, ease: "none" }, 4.4);
+  // Chapter 3 — slight nudge right; card 02 lands on the left, card 01 stays.
+  tl.to(target, { x: 0.3, duration: 1.4, ease: "power1.inOut" }, 5.2);
+  tl.to(lean, { y: -0.12, z: -0.035, duration: 1.4, ease: "power1.inOut" }, 5.2);
+  tl.fromTo(c2, { autoAlpha: 0, x: -70 }, { autoAlpha: 1, x: 0, duration: 0.9, ease: "none" }, 5.8);
 
-    // Chapter 3 — drift right, second callout on the left
-    tl.to(target, m ? { x: 0, y: 0.35, scale: 0.62, duration: 1.5, ease: "power1.inOut" }
-                    : { x: 1.25, y: -0.05, scale: 1.15, duration: 1.5, ease: "power1.inOut" }, 4.7);
-    tl.to(lean, { y: -0.2, z: -0.06, duration: 1.5, ease: "power1.inOut" }, 4.7);
-    tl.fromTo(c2, m ? { autoAlpha: 0, y: 46 } : { autoAlpha: 0, x: -70 },
-                  m ? { autoAlpha: 1, y: 0, duration: 0.9, ease: "none" } : { autoAlpha: 1, x: 0, duration: 0.9, ease: "none" }, 5.1);
-    tl.to(c2, m ? { autoAlpha: 0, y: -30, duration: 0.6, ease: "none" } : { autoAlpha: 0, x: 50, duration: 0.6, ease: "none" }, 6.8);
+  // Chapter 4 — settle dead centre; card 03 rises below with all three visible.
+  tl.to(target, { x: 0, y: 0.05, scale: 1.02, duration: 1.4, ease: "power1.inOut" }, 7.8);
+  tl.to(lean, { y: 0, z: 0, duration: 1.4, ease: "power1.inOut" }, 7.8);
+  tl.fromTo(c3, { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: "none" }, 8.4);
+  tl.to({}, { duration: 1.6 }, 9.3); // hold the finished tableau for a beat
 
-    // Chapter 4 — settle back to centre, last callout below
-    tl.to(target, m ? { x: 0, y: 0.3, scale: 0.58, duration: 1.5, ease: "power1.inOut" }
-                    : { x: 0, y: 0.05, scale: 1.05, duration: 1.5, ease: "power1.inOut" }, 7.0);
-    tl.to(lean, { y: 0, z: 0, duration: 1.5, ease: "power1.inOut" }, 7.0);
-    tl.fromTo(c3, { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: "none" }, 7.5);
-    tl.to({}, { duration: 1.0 }, 8.7); // hold the final frame for a beat
-
-    // No WebGL → mirror the tour on the static cutout image instead
-    if (noWebgl) {
-      gsap.set(fallback, { xPercent: -50, yPercent: -50 });
-      tl.fromTo(fallback, { scale: 0.9 }, { scale: 1.06, duration: 1.6, ease: "power1.inOut" }, 0);
-      if (!m) {
-        tl.to(fallback, { x: "-26vw", rotation: 4, duration: 1.5, ease: "power1.inOut" }, 2.3);
-        tl.to(fallback, { x: "26vw", rotation: -4, duration: 1.5, ease: "power1.inOut" }, 4.7);
-        tl.to(fallback, { x: 0, rotation: 0, scale: 0.98, duration: 1.5, ease: "power1.inOut" }, 7.0);
-      }
-    }
-    return tl;
-  };
-
-  mm.add("(min-width: 900px)", () => { buildTimeline(false); });
-  mm.add("(max-width: 899px)", () => { buildTimeline(true); });
+  // No WebGL → mirror the tour on the static cutout image instead
+  if (noWebgl) {
+    gsap.set(fallback, { xPercent: -50, yPercent: -50 });
+    tl.fromTo(fallback, { scale: 0.9 }, { scale: 1.06, duration: 1.6, ease: "power1.inOut" }, 0);
+    tl.to(fallback, { x: "-4vw", rotation: 1.5, duration: 1.4, ease: "power1.inOut" }, 2.6);
+    tl.to(fallback, { x: "4vw", rotation: -1.5, duration: 1.4, ease: "power1.inOut" }, 5.2);
+    tl.to(fallback, { x: 0, rotation: 0, scale: 0.98, duration: 1.4, ease: "power1.inOut" }, 7.8);
+  }
 }
 
 /* ---------- 4 · Statement: words fill in as you scroll ---------- */
@@ -746,6 +737,12 @@ function initGallery() {
    BOOT
    ============================================================ */
 function boot() {
+  // Phones: simple static experience — no 3D scene, no scroll choreography.
+  // styles.css hides the canvas and lays the page out; links are already wired.
+  if (SIMPLE) {
+    document.body.classList.add("simple");
+    return;
+  }
   try {
     initThree();
   } catch (err) {
@@ -755,6 +752,12 @@ function boot() {
   }
   initScroll();
 }
+
+// The simple and choreographed modes must never mix — reload when the
+// viewport crosses the phone boundary (rotation, window resize).
+try {
+  window.matchMedia("(max-width: 900px)").addEventListener("change", () => location.reload());
+} catch (e) { /* older browsers: no live switch, layout still correct on next load */ }
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", boot);

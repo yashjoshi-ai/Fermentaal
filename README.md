@@ -12,10 +12,10 @@ On laptops/desktops the page is choreographed like an Apple product page — scr
 1. **Hero** — the brandmark rises in on load, then scrubs away as you scroll; a frosted
    glass nav (brand + section links + Order pill) slides in once you leave the hero.
 2. **"Take a closer look"** — the section **pins** over a long scroll runway and your
-   scroll conducts a guided bottle tour: the bottle zooms up close, then stays **centred**
-   (only a slight nudge and lean as each card lands) while the three frosted-glass story
-   cards **accumulate** — every card stays on screen, so the section ends with all three
-   framing the bottle.
+   scroll conducts a guided bottle tour: the bottle zooms up close, then **sways gently
+   around its central position** (a soft side-lean as each card lands) while the three
+   frosted-glass story cards **accumulate** — every card stays on screen, so the section
+   ends with all three framing the bottle.
 3. **Story** — the bottle floats into the text column, then hands the page over.
 4. **Statement** — a big line of copy fills in **word by word** as it crosses the viewport.
 5. **What's inside** — the dark panel scales in; stat counters (100 / 0 / 1) tick up.
@@ -29,11 +29,11 @@ document) and degrades gracefully without WebGL or JavaScript. The choreography 
 ## The simple, order-first experience (phones)
 On phones and small tablets (**≤ 900px**) the site deliberately switches to a **plain,
 static layout — no animations, no 3D, no pinned scrolling**. It loads fast and puts
-ordering first: the nav (brand + Order pill) is always visible, the hero shows the real
-bottle photo with full-width CTAs, the story cards / stats / steps are all statically
-readable, and a **sticky bottom bar keeps "Order on WhatsApp" one tap away** on every
-screen. The switch is the `SIMPLE` flag in `app.js` (a `max-width: 900px` match) plus the
-phone media query in `styles.css` — the desktop experience is completely unaffected.
+ordering first: the nav with the **Order pill is always visible** (one tap scrolls to the
+order section), the hero shows the real bottle photo with full-width CTAs, and the story
+cards / stats / steps are all statically readable. The switch is the `SIMPLE` flag in
+`app.js` (a `max-width: 900px` match) plus the phone media query in `styles.css` — the
+desktop experience is completely unaffected.
 
 Ongoing change requests are tracked in [`TASKS.md`](TASKS.md).
 

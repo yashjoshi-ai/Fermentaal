@@ -33,8 +33,6 @@ const CONFIG = {
   set("wa-link", wa);
   set("ig-link", ig);
   set("ig-link-2", ig);
-  set("wa-link-bar", wa);
-  set("ig-link-bar", ig);
   const yr = document.getElementById("year");
   if (yr) yr.textContent = new Date().getFullYear();
 })();
@@ -624,7 +622,7 @@ function initShowcase() {
     scrollTrigger: {
       trigger: stageEl,
       start: "top top",
-      end: "+=520%",
+      end: "+=580%",
       scrub: 1,
       pin: true,
       anticipatePin: 1,
@@ -641,15 +639,15 @@ function initShowcase() {
   tl.fromTo(".showcase__title", { autoAlpha: 0, y: 34 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "none" }, 0.9);
   tl.to(".showcase__title", { autoAlpha: 0, y: -40, duration: 0.7, ease: "none" }, 2.2);
 
-  // Chapter 2 — ease back from the close-up with a slight nudge left;
+  // Chapter 2 — ease back from the close-up and sway left of centre;
   // card 01 lands on the right and stays.
-  tl.to(target, { x: -0.3, y: -0.05, scale: 1.08, duration: 1.4, ease: "power1.inOut" }, 2.6);
-  tl.to(lean, { y: 0.12, z: 0.035, duration: 1.4, ease: "power1.inOut" }, 2.6);
+  tl.to(target, { x: -0.45, y: -0.05, scale: 1.08, duration: 1.4, ease: "power1.inOut" }, 2.6);
+  tl.to(lean, { y: 0.14, z: 0.04, duration: 1.4, ease: "power1.inOut" }, 2.6);
   tl.fromTo(c1, { autoAlpha: 0, x: 70 }, { autoAlpha: 1, x: 0, duration: 0.9, ease: "none" }, 3.2);
 
-  // Chapter 3 — slight nudge right; card 02 lands on the left, card 01 stays.
-  tl.to(target, { x: 0.3, duration: 1.4, ease: "power1.inOut" }, 5.2);
-  tl.to(lean, { y: -0.12, z: -0.035, duration: 1.4, ease: "power1.inOut" }, 5.2);
+  // Chapter 3 — sway right of centre; card 02 lands on the left, card 01 stays.
+  tl.to(target, { x: 0.45, duration: 1.4, ease: "power1.inOut" }, 5.2);
+  tl.to(lean, { y: -0.14, z: -0.04, duration: 1.4, ease: "power1.inOut" }, 5.2);
   tl.fromTo(c2, { autoAlpha: 0, x: -70 }, { autoAlpha: 1, x: 0, duration: 0.9, ease: "none" }, 5.8);
 
   // Chapter 4 — settle dead centre; card 03 rises below with all three visible.
@@ -662,8 +660,8 @@ function initShowcase() {
   if (noWebgl) {
     gsap.set(fallback, { xPercent: -50, yPercent: -50 });
     tl.fromTo(fallback, { scale: 0.9 }, { scale: 1.06, duration: 1.6, ease: "power1.inOut" }, 0);
-    tl.to(fallback, { x: "-4vw", rotation: 1.5, duration: 1.4, ease: "power1.inOut" }, 2.6);
-    tl.to(fallback, { x: "4vw", rotation: -1.5, duration: 1.4, ease: "power1.inOut" }, 5.2);
+    tl.to(fallback, { x: "-7vw", rotation: 2, duration: 1.4, ease: "power1.inOut" }, 2.6);
+    tl.to(fallback, { x: "7vw", rotation: -2, duration: 1.4, ease: "power1.inOut" }, 5.2);
     tl.to(fallback, { x: 0, rotation: 0, scale: 0.98, duration: 1.4, ease: "power1.inOut" }, 7.8);
   }
 }

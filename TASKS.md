@@ -38,7 +38,7 @@ This site's "pinned scroll" sections are almost always built one of these ways. 
 **General rule of thumb:** the fix is almost always "make the pinned/tracked container taller" or "increase the scroll-distance number" — the animation itself doesn't need to change, just how much scrolling it's stretched across. Change one number, save, scroll through it, adjust again. It's a quick trial-and-error loop.
 
 > Note for this site: the section lives in `app.js` → `initShowcase()`. The scroll distance is
-> `end: "+=520%"` and the catch-up delay is `scrub: 1` in the timeline's `scrollTrigger` config.
+> `end: "+=580%"` and the catch-up delay is `scrub: 1` in the timeline's `scrollTrigger` config.
 
 ---
 
@@ -51,7 +51,7 @@ This site's "pinned scroll" sections are almost always built one of these ways. 
 - **Requested Change:** Slow down the scroll animation so each card/state has more scroll distance (or more scrub delay) behind it — enough time to actually read the text before it moves to the next state.
 - **Priority:** P1
 - **Status:** Done
-- **Notes:** `initShowcase()` in `app.js`: scroll runway increased `end: "+=320%"` → `"+=520%"`, scrub `0.6` → `1`, and card entrances spaced further apart on the timeline. Combined with TASK-003 (cards no longer disappear), every card now stays readable for the rest of the section.
+- **Notes:** `initShowcase()` in `app.js`: scroll runway increased `end: "+=320%"` → `"+=580%"`, scrub `0.6` → `1`, and card entrances spaced further apart on the timeline. Combined with TASK-003 (cards no longer disappear), every card now stays readable for the rest of the section.
 
 ### TASK-003 — Done 2026-07-05
 - **Page/Section:** Home — "The bottle" scroll section (pointer cards 01 "Alive in every sip", 02 "Real pineapple, pressed", 03 "Brewed slow, by hand")
@@ -62,7 +62,7 @@ This site's "pinned scroll" sections are almost always built one of these ways. 
   2. Make cards 01, 02, 03 accumulate instead of replace each other — once a card appears it should stay on screen, so by the end of the section all three are visible together.
 - **Priority:** P1
 - **Status:** Done
-- **Notes:** `initShowcase()` in `app.js`: bottle drift reduced from ±1.25 world units to a ±0.3 nudge (lean halved too), and the card fade-out tweens removed — cards 01 (right), 02 (left) and 03 (bottom) accumulate, ending with all three framing the centred bottle.
+- **Notes:** `initShowcase()` in `app.js`: bottle drift reduced from ±1.25 world units to a gentle ±0.45 sway around centre (lean softened too), and the card fade-out tweens removed — cards 01 (right), 02 (left) and 03 (bottom) accumulate, ending with all three framing the centred bottle.
 
 ### TASK-004 — Done 2026-07-05
 - **Page/Section:** Whole site — phone/small-tablet layout (≤ 900px)
@@ -71,4 +71,4 @@ This site's "pinned scroll" sections are almost always built one of these ways. 
 - **Requested Change:** Simple static layout on phones — no animations or effects; neat design emphasizing ease of placing an order and brand awareness. Desktop layout unchanged.
 - **Priority:** P1
 - **Status:** Done
-- **Notes:** New `SIMPLE` flag in `app.js` skips three.js/GSAP/Lenis entirely on ≤ 900px; phone media query in `styles.css` delivers the static layout: always-visible nav (brand + Order pill), hero with real bottle photo + full-width CTAs, static story cards/stats/steps, and a sticky bottom "Order on WhatsApp" bar (+ Instagram) that keeps ordering one tap away. Desktop untouched.
+- **Notes:** New `SIMPLE` flag in `app.js` skips three.js/GSAP/Lenis entirely on ≤ 900px; phone media query in `styles.css` delivers the static layout: always-visible nav whose Order pill scrolls to the order section, hero with real bottle photo + full-width CTAs, static story cards/stats/steps. Desktop untouched. (A sticky bottom order bar was tried and removed on request — the top-bar Order button is the single shortcut.)
